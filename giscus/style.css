@@ -92,22 +92,54 @@
   --color-prettylights-syntax-variable: #333333;
 }
 
-/* Typography adjustments to match your site */
-.gsc-comment-box,
-.gsc-comment {
-  font-family: var(--font-family-default);
-}
+/* Typography adjustments - specific font usage */
 
+/* Most UI elements use Outfit (sans-serif) */
+.gsc-header,
+.gsc-left-header,
+.gsc-comments-count,
+.gsc-comments-count-separator,
 .gsc-comment-header,
 .gsc-comment-author,
-.gsc-left-header,
-.gsc-comments-count {
+.gsc-comment-footer,
+.gsc-reply-header,
+.gsc-reply-author,
+.gsc-reply-footer,
+.gsc-comment-replies-count,
+.gsc-comment-box-tabs,
+.gsc-comment-box-bottom,
+.gsc-comment-box-buttons,
+.gsc-comment-box-markdown-hint,
+.gsc-pagination,
+.gsc-pagination-button,
+.gsc-loading-text,
+.btn,
+.gsc-reactions-count,
+.gsc-social-reaction-summary-item,
+.gsc-upvote-button,
+.gsc-toolbar-item {
   font-family: var(--font-family-sans);
 }
 
-code,
-pre,
+/* Comment writing textarea uses Google Sans Code */
 .gsc-comment-box-textarea {
+  font-family: var(--font-family-monospace);
+}
+
+/* Comment content and preview use Libre Baskerville */
+.gsc-comment-content,
+.gsc-reply-content,
+.gsc-comment-box-preview {
+  font-family: var(--font-family-default);
+}
+
+/* Code blocks within comments use Google Sans Code */
+.gsc-comment-content code,
+.gsc-comment-content pre,
+.gsc-reply-content code,
+.gsc-reply-content pre,
+.gsc-comment-box-preview code,
+.gsc-comment-box-preview pre {
   font-family: var(--font-family-monospace);
 }
 
@@ -120,19 +152,49 @@ pre,
 
 /* Ensure consistent line heights with your site */
 .gsc-comment-content,
-.gsc-reply-content {
-  line-height: 1.5;
+.gsc-reply-content,
+.gsc-comment-box-preview {
+  line-height: 1.5; /* Libre Baskerville - matches your site's body text */
+}
+
+.gsc-comment-box-textarea {
+  line-height: 1.4; /* Google Sans Code - slightly tighter for code */
 }
 
 /* Style the comment textarea to match your site's forms */
 .gsc-comment-box-textarea {
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.4;
+  font-weight: 400;
 }
 
-/* Adjust overall font size to match your site */
+/* Comment content typography */
+.gsc-comment-content,
+.gsc-reply-content,
+.gsc-comment-box-preview {
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* UI elements typography */
+.gsc-header,
+.gsc-left-header,
+.gsc-comment-header,
+.gsc-reply-header,
+.btn {
+  font-weight: 400;
+}
+
+.gsc-comments-count,
+.gsc-comments-count-separator {
+  font-weight: 600;
+}
+
+/* Base font size - most UI elements inherit this */
 body {
   font-size: 1rem;
+  font-family: var(--font-family-sans); /* Default to Outfit for UI */
 }
 
 /* Ensure proper spacing matches your site */
