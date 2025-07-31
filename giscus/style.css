@@ -97,6 +97,7 @@
 .gsc-reply-content,
 .gsc-comment-box-preview {
   font-family: var(--font-family-default);
+  font-size: 1.125rem;
   /* Should now match your site's body text perfectly */
 }
 
