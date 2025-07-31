@@ -1,0 +1,24 @@
+.highlight {
+  border-radius: 0.3rem;
+}
+
+.highlight pre {
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+  line-height: 1.4;
+}
+
+code {
+  font-family: $code-font;
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+*:not(pre) > code {
+  background-color: $code-background;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.3rem;
+}
+
+@import "solarized_light";

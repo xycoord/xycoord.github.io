@@ -1,0 +1,15 @@
+{% if site.footer-links.email %}
+  <a href="mailto:{{ site.footer-links.email }}" title="Email">
+    <i class="fa-solid fa-envelope"></i>
+  </a>
+{% endif %}
+{% if site.footer-links.github %}
+  <a href="https://github.com/{{ site.footer-links.github }}" title="GitHub">
+    <i class="fa-brands fa-github"></i>
+  </a>
+{% endif %}
+{% if site.footer-links.linkedin %}
+  <a href="https://www.linkedin.com/in/{{ site.footer-links.linkedin }}" title="LinkedIn">
+    <i class="fa-brands fa-linkedin-in"></i>
+  </a>
+{% endif %}

@@ -1,0 +1,10 @@
+{
+    "name": "Jekyll Development Environment",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "forwardPorts": [4000],
+    "postCreateCommand": "bundle install",
+    "remoteUser": "root"
+}

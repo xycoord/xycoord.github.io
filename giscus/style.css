@@ -1,0 +1,153 @@
+---
+---
+/* Custom Giscus theme for Jekyll blog
+ * Matches the site's typography and color scheme
+ */
+
+:root {
+  /* Fonts - matching your site's typography */
+  --font-family-default: "Libre Baskerville", serif;
+  --font-family-sans: "Outfit", sans-serif;
+  --font-family-monospace: "Google Sans Code", monospace;
+  
+  /* Colors - mapping your SCSS variables to Giscus properties */
+  
+  /* Backgrounds */
+  --color-canvas-default: #ffffff;
+  --color-canvas-subtle: #f8f8f8;
+  --color-canvas-inset: #f0f0f0;
+  --color-canvas-overlay: #ffffff;
+  
+  /* Text colors */
+  --color-fg-default: #333333;
+  --color-fg-muted: #666666;
+  --color-fg-subtle: #999999;
+  
+  /* Accent/link colors - using your orange theme */
+  --color-accent-fg: #e08000;
+  --color-accent-subtle: rgba(224, 128, 0, 0.1);
+  --color-accent-muted: rgba(224, 128, 0, 0.3);
+  --color-accent-emphasis: #cc7300;
+  
+  /* Borders - matching your light gray theme */
+  --color-border-default: #eeeeee;
+  --color-border-muted: #cccccc;
+  --color-border-subtle: #f0f0f0;
+  
+  /* Button styles */
+  --color-btn-text: #333333;
+  --color-btn-bg: #ffffff;
+  --color-btn-border: #eeeeee;
+  --color-btn-hover-bg: #f8f8f8;
+  --color-btn-hover-border: #cccccc;
+  --color-btn-active-bg: #f0f0f0;
+  --color-btn-active-border: #cccccc;
+  --color-btn-shadow: 0 1px 0 rgba(31, 35, 40, 0.04);
+  --color-btn-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  
+  /* Primary button (post comment) - using your accent color */
+  --color-btn-primary-text: #ffffff;
+  --color-btn-primary-bg: #e08000;
+  --color-btn-primary-border: #cc7300;
+  --color-btn-primary-hover-bg: #cc7300;
+  --color-btn-primary-hover-border: #b86600;
+  --color-btn-primary-selected-bg: #b86600;
+  --color-btn-primary-shadow: 0 1px 0 rgba(31, 35, 40, 0.1);
+  --color-btn-primary-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  
+  /* Form inputs */
+  --color-input-bg: #ffffff;
+  --color-input-border: #eeeeee;
+  --color-input-contrast-bg: #f8f8f8;
+  
+  /* Reactions */
+  --color-social-reaction-bg-hover: rgba(224, 128, 0, 0.05);
+  --color-social-reaction-bg-reacted-hover: rgba(224, 128, 0, 0.15);
+  --color-social-reaction-border: rgba(224, 128, 0, 0.4);
+  
+  /* Success/danger colors */
+  --color-success-fg: #28a745;
+  --color-danger-fg: #dc3545;
+  --color-attention-fg: #ffc107;
+  
+  /* Background for success/danger/attention */
+  --color-success-subtle: rgba(40, 167, 69, 0.1);
+  --color-danger-subtle: rgba(220, 53, 69, 0.1);
+  --color-attention-subtle: rgba(255, 193, 7, 0.1);
+  
+  /* Muted versions */
+  --color-success-muted: rgba(40, 167, 69, 0.4);
+  --color-danger-muted: rgba(220, 53, 69, 0.4);
+  --color-attention-muted: rgba(255, 193, 7, 0.4);
+  
+  /* Code background - matching your highlights */
+  --color-neutral-muted: #f0f0f0;
+  
+  /* Syntax highlighting colors to match your theme */
+  --color-prettylights-syntax-comment: #666666;
+  --color-prettylights-syntax-constant: #e08000;
+  --color-prettylights-syntax-string: #28a745;
+  --color-prettylights-syntax-keyword: #dc3545;
+  --color-prettylights-syntax-entity: #6f42c1;
+  --color-prettylights-syntax-variable: #333333;
+}
+
+/* Typography adjustments to match your site */
+.gsc-comment-box,
+.gsc-comment {
+  font-family: var(--font-family-default);
+}
+
+.gsc-comment-header,
+.gsc-comment-author,
+.gsc-left-header,
+.gsc-comments-count {
+  font-family: var(--font-family-sans);
+}
+
+code,
+pre,
+.gsc-comment-box-textarea {
+  font-family: var(--font-family-monospace);
+}
+
+/* Match your site's rounded corners and spacing */
+.gsc-comment-box,
+.gsc-comment,
+.btn {
+  border-radius: 0.3rem;
+}
+
+/* Ensure consistent line heights with your site */
+.gsc-comment-content,
+.gsc-reply-content {
+  line-height: 1.5;
+}
+
+/* Style the comment textarea to match your site's forms */
+.gsc-comment-box-textarea {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Adjust overall font size to match your site */
+body {
+  font-size: 1rem;
+}
+
+/* Ensure proper spacing matches your site */
+.gsc-main {
+  margin-top: 1rem;
+}
+
+/* Style links to match your site's accent color */
+.gsc-comment-content a,
+.gsc-reply-content a {
+  color: var(--color-accent-fg);
+  text-decoration: underline;
+}
+
+.gsc-comment-content a:hover,
+.gsc-reply-content a:hover {
+  color: var(--color-accent-emphasis);
+}

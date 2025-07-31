@@ -1,0 +1,29 @@
+
+//
+// VARIABLES
+//
+
+// Colors
+$accent: #e08000;
+
+// Grays
+$black: #111;
+$darkerGray: #222;
+$darkGray: #333;
+$gray: #666;
+$midLightGray: #ccc;
+$lightGray: #eee;
+$code-background: #f0f0f0;
+$white: #ffffff;
+
+// Font stacks
+$heading-font: "Outfit", sans-serif;
+$body-font: "Libre Baskerville", serif;
+$code-font: "Google Sans Code", monospace;
+
+// Mobile breakpoints
+@mixin mobile {
+  @media screen and (max-width: 640px) {
+    @content;
+  }
+}
