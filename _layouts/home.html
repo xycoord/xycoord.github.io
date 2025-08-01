@@ -2,8 +2,11 @@
 layout: default
 ---
 
+<div class="home-content">
+  {{ content }}
+</div>
+
 <div class="posts">
-  <h1>Blog Posts</h1>
   {% for post in site.posts %}
     <article class="post">
 

@@ -298,11 +298,11 @@ nav {
 }
 
 .post {
+  text-wrap-style: pretty;
   blockquote {
     margin: 1em .8em;
     border-left: 2px solid $gray;
     padding: 0 1em;
-    color: $gray;
   }
 
   .comments {
@@ -340,6 +340,51 @@ nav i {
   color: $darkGray;
   font-size: 1.5rem;
 }
+
+.home-masthead {
+  margin-top: 2rem;
+  @include mobile {
+    margin-top: 1rem;
+  }
+}
+
+
+
+.home-content {
+  border-bottom: 1px solid $lightGray;
+  padding-block: 0.5rem;
+  margin-bottom: 3rem;
+
+  a {
+    color: $darkGray;
+    &:hover {
+      color: $accent;
+    }
+  }
+  td {
+    border: none;
+    padding: 0.5rem 0.75rem;
+    line-height: 1.4;
+    text-wrap-style: pretty;
+  }
+  td:first-child {
+    text-align: right;
+    white-space: nowrap;
+  }
+}
+
+@keyframes fade-in {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+.posts {
+  animation: fade-in linear;
+  animation-timeline: view();
+  animation-range-start: entry 5%; 
+  animation-range-end: entry 50%;
+}
+
 
 // Settled on moving the import of syntax highlighting to the bottom of the CSS
 // ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start

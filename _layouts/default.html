@@ -42,7 +42,7 @@
 
 
   <body>
-    <div class="wrapper-masthead">
+    <div class="wrapper-masthead {% if page.layout == 'home' %}home-masthead{% endif %}">
       <div class="container">
         <header class="masthead clearfix">
           <a href="{{ site.baseurl }}/" class="site-avatar"><img src="{{ site.avatar }}" /></a>
