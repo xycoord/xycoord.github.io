@@ -355,17 +355,23 @@ nav i {
   padding-block: 0.5rem;
   margin-bottom: 3rem;
 
-  a {
-    color: $darkGray;
-    &:hover {
-      color: $accent;
-    }
+  p > a {
+    font-family: $heading-font;
+    font-weight: 600;
   }
+  
   td {
     border: none;
     padding: 0.5rem 0.75rem;
     line-height: 1.4;
     text-wrap-style: pretty;
+    a {
+      font-family: $body-font;
+      color: $darkGray;
+      &:hover {
+        color: $accent;
+      }
+    }
   }
   td:first-child {
     text-align: right;
@@ -381,8 +387,14 @@ nav i {
 .posts {
   animation: fade-in linear;
   animation-timeline: view();
-  animation-range-start: entry 5%; 
+  animation-range-start: entry 0%; 
   animation-range-end: entry 50%;
+}
+
+@media print {
+  .wrapper-masthead {
+    display: none;
+  }
 }
 
 
