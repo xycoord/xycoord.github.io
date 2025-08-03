@@ -35,8 +35,8 @@ Research Skills:
 All independently designed and implemented:
 
 1. **Transformer Language Model** [[GitHub]](https://github.com/xycoord/Language-Modelling/)  
-  From-scratch PyTorch implementation with KV caching, RoPE [[Blog Post]](https://loganthomson.com/RoPE/).  
-  Modular architecture emphasizing code clarity and understanding.  
+  From-scratch PyTorch implementation with KV caching and RoPE [[Blog Post]](https://loganthomson.com/RoPE/).  
+  Modular architecture emphasising code clarity and understanding.  
 
 2. **Reinforcement Learning Course** [[Part 1]](https://colab.research.google.com/drive/1Lm_TI-Vrzai-WZQeZL3o7US07vVKWXlQ) [[Part 2]](https://colab.research.google.com/drive/1UULTQYnymQOpa7nuaw6mDXnvWRV9R_2y)  
   Teaching RL through rigorous mathematical derivations and implementations from first principles.  

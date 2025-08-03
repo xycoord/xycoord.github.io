@@ -12,6 +12,7 @@ My recent projects deconstruct LLM components by implementing them myself and ex
 
 I also enjoy reading mech interp and alignment papers.
 
-*Oxford MCompPhil • Computer Science + Philosophy of Mind & Ethics*
+*Oxford MCompPhil • Computer Science + Philosophy of Mind & Ethics*  
+*First Class (2024)*
 
 [Full CV](./CV/)
