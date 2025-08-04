@@ -1,7 +1,7 @@
 ---
 layout: home
 # Add any other page-specific variables here, like a title
-title: Home
+title:
 ---
 
 My recent projects deconstruct LLM components by implementing them myself and explaining the underlying theory:
