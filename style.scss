@@ -406,6 +406,10 @@ a.footnote {
   }
 }
 
+sup[role="doc-noteref"] + sup[role="doc-noteref"]::before {
+  content: ",";
+}
+
 img + em {
   display: block;
   font-size: 0.8em;
