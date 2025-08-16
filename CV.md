@@ -41,7 +41,7 @@ All independently designed and implemented:
   From-scratch PyTorch implementation with KV caching and RoPE [[Blog Post]](https://loganthomson.com/RoPE/).  
   Modular architecture emphasising code clarity and understanding.  
 
-2. **Reinforcement Learning Course** [[Part 1]](https://colab.research.google.com/drive/1Lm_TI-Vrzai-WZQeZL3o7US07vVKWXlQ) [[Part 2]](https://colab.research.google.com/drive/1UULTQYnymQOpa7nuaw6mDXnvWRV9R_2y)  
+2. **Reinforcement Learning Course** [[Part 1]](https://colab.research.google.com/drive/1Lm_TI-Vrzai-WZQeZL3o7US07vVKWXlQ) [[Part 2]](https://colab.research.google.com/drive/1UULTQYnymQOpa7nuaw6mDXnvWRV9R_2y) [[GitHub]](https://github.com/xycoord/deep-rl-course)  
   Teaching RL through rigorous mathematical derivations and implementations from first principles.  
 
 3. **BPE Tokeniser** [[GitHub]](https://github.com/xycoord/Language-Modelling/tree/main/src/lm_tokenizers) [[Blog Post]](https://loganthomson.com/Optimising-BPE/)  
@@ -62,8 +62,8 @@ Active interest in AI safety research, particularly mechanistic interpretability
 ## Team Experience
 **Co-founder at [[The Grove]](https://thegrovenotts.co.uk)**, 2024
 - Collaboratively designed and built recording studio/music venue to high technical standards.
-- Translated technical requirements (e.g. fire safety regulations, acoustic design) into actionable tasks for team.
-- Successfully built thriving community space; exited to focus on AI safety
+- Translated technical requirements (e.g. fire safety regulations, acoustic design) into actionable tasks for the team.
+- Successfully built thriving community space; exited to focus on AI safety.
 
 ## Education
 
