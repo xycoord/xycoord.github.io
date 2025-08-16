@@ -362,23 +362,23 @@ nav i {
   padding-block: 0.5rem;
   margin-bottom: 3rem;
 
-  p > a {
+  a.special-link {
     font-family: $heading-font;
     font-weight: 600;
   }
-  
-  td {
-    border: none;
-    padding: 0.5rem 0.75rem;
-    line-height: 1.4;
-    text-wrap-style: pretty;
-    a {
+  a:not(.special-link) {
       font-family: $body-font;
       color: $darkGray;
       &:hover {
         color: $accent;
       }
     }
+  td {
+    border: none;
+    padding: 0.5rem 0.75rem;
+    line-height: 1.4;
+    text-wrap-style: pretty;
+    
   }
   td:first-child {
     text-align: right;

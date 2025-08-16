@@ -12,21 +12,24 @@ permalink: /CV/
 ## Technical Skills
 
 Core ML Engineering:
-- **Python** [Projects 1,2,3,4]
-- **PyTorch** [Projects 1,2,4]
-- **ML Experimentation** [Projects 1,2,4]  
+- **Python** [Projects 1,2,3,4,5,6]
+- **PyTorch** [Projects 1,2,4,5,6]
+- **ML Experimentation** [Projects 1,2,4,5,6]  
   Experiment design, hyperparameter tuning, debugging training
 
 Specialised Expertise:
 - **Transformers and Language Models** [Project 1]
-- **Reinforcement Learning** [Project 2]  
-  Focus on policy gradient algorithms
+- **Reinforcement Learning** [Projects 2,6]  
+  Focus on policy gradient algorithms & PPO
 - **Algorithm Optimisation** [Project 3]
+
+Active Exploration:
+- **Mechanistic Interpretability** [Project 4]
 
 Research Skills:
 - **Technical Writing** [Projects 1,2,3]  
   Clear explanations of complex topics (blog posts, teaching materials)
-- **Paper Re-implementation** [Projects 1,2,4]
+- **Paper Re-implementation** [Projects 1,2,4,5,6]
 - **Mathematical Rigor** [Projects 1,2]
 
 
@@ -44,11 +47,23 @@ All independently designed and implemented:
 3. **BPE Tokeniser** [[GitHub]](https://github.com/xycoord/Language-Modelling/tree/main/src/lm_tokenizers) [[Blog Post]](https://loganthomson.com/Optimising-BPE/)  
   Optimised training implementation (hours → 13s) with systematic profiling.  
 
-4. **4th-Year Research Project** (Supervised by Ronald Clark) [[GitHub]](https://github.com/xycoord/Transparency-Segmentation) [[Report]](https://drive.google.com/file/d/1BvU4-v3jf7onxT1T6RyVTEVyawAkavyV/view?usp=drive_link)  
+4. **Mechanistic Interpretability** [[GitHub]](https://github.com/xycoord/Language-Modelling/tree/main/src/mech_interp)  
+  Reproduced "Toy Models of Superposition" experiments and trained SAEs (ReLU, TopK, BatchTopK) to extract their learnt features.  
+
+5. **Masters Research Project** (Supervised by Ronald Clark) [[GitHub]](https://github.com/xycoord/Transparency-Segmentation) [[Report]](https://drive.google.com/file/d/1BvU4-v3jf7onxT1T6RyVTEVyawAkavyV/view?usp=drive_link)  
   Fine-tuned diffusion models for image segmentation of transparent objects.  
   Implemented and evaluated NeRF methods which learn how light bends in a scene.  
 
-I also enjoy reading mech interp and alignment papers.
+6. **PPO Implementation** [[GitHub]](https://github.com/xycoord/PPO)  
+  From-scratch PPO agent featuring key modern techniques, such as GAE and vectorised environments.
+
+Active interest in AI safety research, particularly mechanistic interpretability approaches.
+
+## Team Experience
+**Co-founder at [[The Grove]](https://thegrovenotts.co.uk)**, 2024
+- Collaboratively designed and built recording studio/music venue to high technical standards.
+- Translated technical requirements (e.g. fire safety regulations, acoustic design) into actionable tasks for team.
+- Successfully built thriving community space; exited to focus on AI safety
 
 ## Education
 
