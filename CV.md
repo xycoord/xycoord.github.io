@@ -6,7 +6,7 @@ permalink: /CV/
 
 # CV - Logan Thomson
 
-[<i class="fa-solid fa-envelope"></i> logan@loganthomson.com](mailto:logan@loganthomson.com) \| [<i class="fa-brands fa-github"></i> github.com/xycoord](https://github.com/xycoord) \| [<i class="fa-solid fa-globe"></i> loganthomson.com](loganthomson.com)
+[<i class="fa-solid fa-envelope"></i> logan@loganthomson.com](mailto:logan@loganthomson.com) \| [<i class="fa-brands fa-github"></i> github.com/xycoord](https://github.com/xycoord) \| [<i class="fa-solid fa-globe"></i> loganthomson.com](https://loganthomson.com)
 
 
 ## Technical Skills
@@ -51,7 +51,7 @@ All independently designed and implemented:
   Reproduced "Toy Models of Superposition" experiments and trained SAEs (ReLU, TopK, BatchTopK) to extract their learnt features.  
 
 5. **Masters Research Project** (Supervised by Ronald Clark) [[GitHub]](https://github.com/xycoord/Transparency-Segmentation) [[Report]](https://drive.google.com/file/d/1BvU4-v3jf7onxT1T6RyVTEVyawAkavyV/view?usp=drive_link)  
-  Fine-tuned diffusion models for image segmentation of transparent objects.  
+  Fine-tuned diffusion models for image segmentation of transparent objects.
   Implemented and evaluated NeRF methods which learn how light bends in a scene.  
 
 6. **PPO Implementation** [[GitHub]](https://github.com/xycoord/PPO)  
