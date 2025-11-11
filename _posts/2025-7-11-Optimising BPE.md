@@ -7,6 +7,8 @@ Training a tokeniser on even modest datasets can be surprisingly slow. When I im
 
 This article details the six optimisations to the vanilla BPE algorithm I implemented - how and why they work as well as their performance gains. When combined they bring that training time down to just 13.3s! The full implementations are available on [GitHub](https://github.com/xycoord/Language-Modelling/tree/main/src/lm_tokenizers) so you can follow along with the optimisations as we go.
 
+<!--more-->
+
 For readers unfamiliar with the BPE algorithm, let’s begin there.
 
 # Introduction to BPE
