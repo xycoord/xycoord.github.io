@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Deep RL: Baselines, Actor-Critic and GAE"
+description: This post explores how baselines, actor-critic methods, and Generalised Advantage Estimation (GAE) reduce variance in deep RL.
 ---
 
 A central challenge in deep RL is the high variance in gradient estimates, leading to unstable training and poor sample efficiency. This blog post explores how baselines, actor-critic methods, and Generalised Advantage Estimation (GAE) tackle this problem.
