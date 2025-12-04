@@ -1,7 +1,8 @@
 ---
 layout: home
 # Add any other page-specific variables here, like a title
-title:
+title: Logan Thomson
+description: Masters CompSci & Philosophy (Oxford, 2024). Interested in Language Models, Interpretability & AI Safety.
 ---
 
 My recent projects deconstruct LLM components by implementing them myself and explaining the underlying theory:

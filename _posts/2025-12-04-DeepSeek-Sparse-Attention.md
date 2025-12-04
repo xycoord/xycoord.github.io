@@ -1,6 +1,7 @@
 ---
 layout: post
 title: DeepSeek Sparse Attention
+description: This post explains the DeepSeek Sparse Attention mechanism introduced in DeepSeek V3.2 to reduce attention cost in long contexts.
 ---
 
 The vanilla attention algorithm[^AIAYN] scales quadratically in context length due to the pairwise Key/Query dot products. This makes long contexts—a requirement for complex reasoning and long agentic tasks—computationally expensive. However, each token typically attends to only a small fraction of prior tokens. Computing accurate attention scores for these relevant positions requires high numerical precision (BF16) and separate computations per head. But identifying which positions are irrelevant can use a much cheaper approximation: lower precision (FP8) and a single shared score across all heads.

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "From Hours to Seconds: Optimising BPE Tokeniser Training" 
+description: "This post describes a set of optimisations to the BPE tokeniser training algorithm required to learn a large vocabulary on a large dataset."
 ---
 
 Training a tokeniser on even modest datasets can be surprisingly slow. When I implemented the standard chunked BPE algorithm (following [Andrej Karpathy's tutorial](https://www.youtube.com/watch?v=zduSFxRajkE)) and ran it on a 100MB dataset, the estimated training time was several hours. For context, I'm building a toy language model from scratch. The tokeniser is just a small part of the puzzle, and here I was, watching my CPU churn through what seemed like it should be a straightforward algorithm. 

@@ -89,3 +89,7 @@ exclude:
   - CNAME
 
 excerpt_separator: "<!--more-->"
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
