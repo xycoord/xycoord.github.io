@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Direct Logit Attribution
-description: This post explains Direct Logit Attribution and Logit Lens: key tools in the initial mechanistic investigation of transformer behaviour.
+description: "This post explains Direct Logit Attribution and Logit Lens: key tools in the initial mechanistic investigation of transformer behaviour."
 ---
 
 Direct Logit Attribution (DLA) is an interpretability method which allows us to understand the contributions of different components of the model to the output logits for a given prompt.
