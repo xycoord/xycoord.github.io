@@ -417,6 +417,12 @@ img + em {
   text-align: center;
 }
 
+.wide-plot {
+  width: 80vw;  /* 90% of viewport width */
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
 @media print {
   .wrapper-masthead {
     display: none;

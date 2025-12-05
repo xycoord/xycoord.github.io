@@ -141,7 +141,7 @@ Since both variances are positive, the variance with the baseline is smaller if:
 
 $$ \mathbb E[g(\tau)^2(b^2 -2br(\tau))] < 0 $$
 
-Unfortunately, this inequality doesn't hold in general for $b \approx \mathbb E[r(\tau)]$ so we're not guaranteed to reduce variance. For instance, if $g(\tau)$ is large when $r(\tau)$ is small, positive terms would dominate the expectation causing the inequality to fail. With further analysis we can show that the optimal constant baseline $b^* = \frac{\mathbb E[g(\tau)^2r(\tau)]}{\mathbb E[g(\tau)^2]}$, which has at least as low variance as no baseline. (The derivation is a good mathematical exercise).
+Unfortunately, this inequality doesn't hold in general for $b \approx \mathbb E[r(\tau)]$ so we're not guaranteed to reduce variance. For instance, if $g(\tau)$ is large when $r(\tau)$ is small, positive terms would dominate the expectation causing the inequality to fail. With further analysis we can show that the optimal constant baseline $b^\ast = \frac{\mathbb E[g(\tau)^2r(\tau)]}{\mathbb E[g(\tau)^2]}$, which has at least as low variance as no baseline. (The derivation is a good mathematical exercise).
 
 However, in practice, using the average reward baseline $(b \approx \mathbb E[r(\tau)])$ does often reduce variance and is simple to implement. For large batch sizes, this average can be taken across just the batch. However, for small batch-sizes, this baseline would be highly variable across batches so a moving average (e.g. EMA) can be used to stabilise this.
 
