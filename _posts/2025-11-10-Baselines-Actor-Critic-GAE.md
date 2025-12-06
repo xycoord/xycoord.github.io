@@ -6,7 +6,7 @@ description: This post explores how baselines, actor-critic methods, and General
 
 A central challenge in deep RL is the high variance in gradient estimates, leading to unstable training and poor sample efficiency. This blog post explores how baselines, actor-critic methods, and Generalised Advantage Estimation (GAE) tackle this problem.
 
-A surprising result underpins these methods: we can subtract arbitrary baselines from returns without biasing gradient estimates—yet this modification may dramatically reduce variance. We'll progress from simple constant baselines through to state-dependent baselines (actor-critic), culminating in GAE, which allows precise control of the bias-variance trade-off. Along the way, we'll examine the effects and guarantees of each method with respect to bias and variance.
+A surprising result underpins these methods: we can subtract arbitrary baselines from returns without biasing gradient estimates -- yet this modification may dramatically reduce variance. We'll progress from simple constant baselines through to state-dependent baselines (actor-critic), culminating in GAE, which allows precise control of the bias-variance trade-off. Along the way, we'll examine the effects and guarantees of each method with respect to bias and variance.
 
 <!--more-->
 
@@ -525,6 +525,6 @@ def compute_gae(rewards: Tensor,
 
 The techniques explored in this post are all fundamentally about variance reduction. This falls under the broader theme of extracting more information from the collected data. Rather than using each trajectory sample only once, we train critics on the full dataset, use value estimates to synthesise missing rewards, and control the balance through GAE. This data efficiency is crucial in RL, where environment interaction is often the computational bottleneck.
 
-The same principle—squeezing as much learning as possible from each batch of experience—motivates the next major development in policy gradient methods: trust region algorithms. TRPO and PPO ask: how can we safely take multiple gradient steps on the same batch without overfitting to it? These algorithms combine the variance reduction techniques from this post with constraints on how much the policy can change, enabling even more efficient use of collected data.
+The same principle -- squeezing as much learning as possible from each batch of experience -- motivates the next major development in policy gradient methods: trust region algorithms. TRPO and PPO ask: how can we safely take multiple gradient steps on the same batch without overfitting to it? These algorithms combine the variance reduction techniques from this post with constraints on how much the policy can change, enabling even more efficient use of collected data.
 
 For next steps, I recommend reading the PPO paper ([Schulman et al., 2017](https://arxiv.org/pdf/1707.06347)) to understand the core principles of the algorithm. Follow it with ["The 37 Implementation Details of Proximal Policy Optimization"](https://iclr-blog-track.github.io/2022/03/25/ppo-implementation-details/) which covers many crucial implementation details absent from the paper.

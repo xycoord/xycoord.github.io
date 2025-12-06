@@ -56,7 +56,7 @@ The $\sigma$ term makes this first part non-linear in $\mathbf{x}$. However, in 
 
 For the mean contribution, there is no approximation involved. By using the actual $\mu^\ast$ and $\sigma^\ast$ from the forward pass, we calculate this term exactly as it appears in the LayerNorm decomposition formula defined above. Since this term undergoes the same $\boldsymbol\gamma/\sigma^\ast$ scaling as the other contributions, we can simply append $-\mu^\ast$ to the list of residual contributions before applying the scaling.
 
-The $\boldsymbol\beta$ contribution is constant and quite separate from the rest of the LayerNorm. It encodes unigram token statistics—how common is this token?
+The $\boldsymbol\beta$ contribution is constant and quite separate from the rest of the LayerNorm. It encodes unigram token statistics -- how common is this token?
 
 ## RMSNorm
 Many modern transformer architectures such as Llama and Qwen replace LayerNorm with RMSNorm defined:
@@ -165,7 +165,7 @@ with model.trace(prompt) as tracer:
 		logit_trajectory.append(intermediate_logits)
 ```
 ## Attention Heads
-The output of an attention layer is just the sum of the outputs of its heads. Hence we can equivalently add the output of each head to the residual stream independently, where each output is a residual contribution. Thus we can use DLA to find the logit contributions for each head—called **head attribution**.
+The output of an attention layer is just the sum of the outputs of its heads. Hence we can equivalently add the output of each head to the residual stream independently, where each output is a residual contribution. Thus we can use DLA to find the logit contributions for each head -- called **head attribution**.
 
 ## Logit Difference
 We're often interested not so much in the raw logits but in the relationship between two logits: typically a correct and an incorrect token. Where the incorrect token is chosen to control for the other tasks the model is doing. The metric for this is the logit difference: `correct_logit - incorrect_logit`. This is linear so we can also look at the contributions of each component to the difference: `correct_logit_contribution - incorrect_logit_contribution`.
@@ -250,7 +250,7 @@ The first thing to note is the large negative effect of $\boldsymbol\beta$. This
 
 We can also observe the three large (+~0.3) contributions from MLPs 9, 10 and 11---late in the network. Notably, there are no significant *direct* contributions to the logits from attention layers. This tells us that these MLPs are crucial is processing any contextual information gathered through attention in order to make meaningful contributions to the logits.
 
-Interestingly, the contribution is roughly equally split across these three consecutive layers. Since none of them individually would overcome the $\boldsymbol\beta$ contribution, this suggests distributed computation rather than redundancy—each layer appears necessary for the final prediction.
+Interestingly, the contribution is roughly equally split across these three consecutive layers. Since none of them individually would overcome the $\boldsymbol\beta$ contribution, this suggests distributed computation rather than redundancy -- each layer appears necessary for the final prediction.
 
 However, DLA alone cannot tell us *what* these MLPs are computing or *how* they're using the contextual information. To draw more concrete conclusions about the mechanisms, we would need further analysis with tools such as activation patching or neuron interpretation.To draw more concrete conclusions, we would need further analysis with tools such as activation patching. 
 
@@ -279,4 +279,4 @@ However, DLA has important limitations. It answers "what contributes" and "how m
 - **No mechanism insight:** DLA cannot tell us what computation a component is performing or what features it's responding to
 - **Interpretation requires care:** What DLA reveals varies case-by-case depending on whether contributions are concentrated or distributed. Each analysis requires reasoning from first principles to form and narrow down hypotheses without drawing overly strong conclusions
 
-For these reasons, DLA is best viewed as a starting point for mechanistic interpretability—a way to efficiently identify which components warrant deeper investigation through complementary techniques such as activation patching and analysis of attention patterns in specific heads.
+For these reasons, DLA is best viewed as a starting point for mechanistic interpretability -- a way to efficiently identify which components warrant deeper investigation through complementary techniques such as activation patching and analysis of attention patterns in specific heads.
