@@ -138,12 +138,28 @@ def unembed(contrib):
 logit_contributions = list(map(unembed, ln_f_contributions))
 ```
 
+Since DLA gives us an exact decomposition of the logits we can check the sum against the final logits.
+
+```python
+summed_logits = sum(logit_contributions)
+
+with model.trace(prompt):
+    actual_logits = model.lm_head.output[:, -1, :].save()
+
+assert torch.allclose(summed_logits, actual_logits, atol=1e-3), \
+    "Mismatch! The sum of DLA components does not equal the model's final logits."
+
+print("Success: The decomposition matches the model's output!")
+```
+
 So far, we've looked at the case where the components we're interested in are individual layers. This is called **layer attribution**. However, we can decompose the model into larger or smaller components for different granularities of attribution.
 
 # Logit Lens
 If we want to know what the model 'believes' at an intermediate layer, we can read the residual stream after layer $l$ and transform it to logits. This approach is called **Logit Lens**. The [original post](https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens) explores a broader range of metrics and visualisations than covered here, and is well worth reading for further approaches.
 
 A key gotcha is that Logit Lens implementations typically don't fix the LayerNorm standard deviation but compute it fresh for the intermediate residuals. This approach answers the question: what would the logits be if the later layers made no contributions to the residual stream? This contrasts with the DLA aim of decomposing the logits exactly into contributions from each component (i.e. the contributions should sum to the logits).
+
+Further, since the aim of Logit Lens is to make a statement about the model's 'belief', it's common to apply the softmax to the logits to give a probability distribution. This is not the case with DLA since the non-linearity of softmax breaks the decomposition.
 
 ```python
 prompt = "The Eiffel Tower is in the city of"
@@ -155,6 +171,7 @@ ln_f = model.transformer.ln_f
 unembed = model.lm_head	
 
 logit_trajectory = []
+prob_trajectory = []
 
 with model.trace(prompt) as tracer:
 	# Save only the residual stream for the last token with [:, -1, :]
@@ -163,12 +180,17 @@ with model.trace(prompt) as tracer:
 	# Apply LayerNorm (computing σ fresh from this intermediate state) 
 	# and Unembedding
 	embed_logits = unembed(ln_f(embedding)).save()
+	# Apply Softmax to get the probability distribution
+	embed_probs = embed_logits.softmax(dim=-1).save()
 	logit_trajectory.append(embed_logits)
+	prob_trajectory.append(embed_probs)
 
 	for layer in layers:
 		residual_stream = layer.output[0][:, -1, :]
 		intermediate_logits = unembed(ln_f(residual_stream)).save()
+		intermediate_probs = intermediate_logits.softmax(dim=-1).save()
 		logit_trajectory.append(intermediate_logits)
+		prob_trajectory.append(intermediate_probs)
 ```
 
 # Attention Heads
@@ -285,3 +307,5 @@ However, DLA has important limitations. It answers "what contributes" and "how m
 - **Interpretation requires care:** What DLA reveals varies case-by-case depending on whether contributions are concentrated or distributed. Each analysis requires reasoning from first principles to form and narrow down hypotheses without drawing overly strong conclusions
 
 For these reasons, DLA is best viewed as a starting point for mechanistic interpretability -- a way to efficiently identify which components warrant deeper investigation through complementary techniques such as activation patching and analysis of attention patterns in specific heads.
+
+*Thanks to Elias Sandmann for their review and suggestions, especially in the Logit Lens section.*
