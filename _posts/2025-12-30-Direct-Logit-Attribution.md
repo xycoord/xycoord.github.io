@@ -154,47 +154,89 @@ print("Success: The decomposition matches the model's output!")
 
 So far, we've looked at the case where the components we're interested in are individual layers. This is called **layer attribution**. However, we can decompose the model into larger or smaller components for different granularities of attribution.
 
-# Logit Lens
-If we want to know what the model 'believes' at an intermediate layer, we can read the residual stream after layer $l$ and transform it to logits. This approach is called **Logit Lens**. The [original post](https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens) explores a broader range of metrics and visualisations than covered here, and is well worth reading for further approaches.
+# Head Attribution
+Layer attribution reveals which attention layers matter, but each attention layer contains multiple heads that may serve different functions. By decomposing further, we can identify which specific heads are responsible for a layer's contribution.
 
-A key gotcha is that Logit Lens implementations typically don't fix the LayerNorm standard deviation but compute it fresh for the intermediate residuals. This approach answers the question: what would the logits be if the later layers made no contributions to the residual stream? This contrasts with the DLA aim of decomposing the logits exactly into contributions from each component (i.e. the contributions should sum to the logits).
+The output of each attention block is projected by the linear projection $W_O$:
 
-Further, since the aim of Logit Lens is to make a statement about the model's 'belief', it's common to apply the softmax to the logits to give a probability distribution. This is not the case with DLA since the non-linearity of softmax breaks the decomposition.
+$$\mathbf{y}_t = \left( \bigoplus_{h=1}^{H} \sum_{j=1}^{T} \alpha_{h,t,j} \mathbf{v}_h^{(j)} \right) W_O$$
+
+To break this down, for each head, the attention weights ($\alpha_{h,t,j}$) and values ($\mathbf{v}_h^{(j)}$) are multiplied at the token level. The head outputs are concatenated and then projected. Because this is all linear, we can rearrange to move the projection inside, turning the concatenation into a sum:
+
+$$\mathbf{y}_t = \sum_{h=1}^{H} \left( \sum_{j=1}^{T} \alpha_{h,t,j} \mathbf{v}_h^{(j)} \right) W_O^{(h)}$$
+
+Where $W_O^{(h)}$ is the slice of $W_O$ corresponding to head $h$.
+
+We can now decompose at the head level by taking each component of this sum and applying the norm and unembedding as before. The easiest way to do this is to take the input to the attention output projection and 'undo the concatenation' with a `view`:
 
 ```python
-prompt = "The Eiffel Tower is in the city of"
-
-token_embed = model.transformer.wte
-position_embed = model.transformer.wpe
-layers = model.transformer.h
-ln_f = model.transformer.ln_f
-unembed = model.lm_head	
-
-logit_trajectory = []
-prob_trajectory = []
+out_proj_weight = attn_block.o_proj.weight.data
 
 with model.trace(prompt) as tracer:
-	# Save only the residual stream for the last token with [:, -1, :]
-	embedding = token_embed.output[:, -1, :] + position_embed.output[:, -1, :]
+    # Save the input to o_proj
+    out_proj_input = attn_block.o_proj.input[0][:, -1, :].save()
+    
+    # Save norm scaling factor
+    final_residual = layers[-1].output[0][:, -1, :]
+    var = final_residual.var(dim=-1, unbiased=False, keepdim=True)
+    sigma = torch.sqrt(var + eps).save()
 
-	# Apply LayerNorm (computing σ fresh from this intermediate state) 
-	# and Unembedding
-	embed_logits = unembed(ln_f(embedding)).save()
-	# Apply Softmax to get the probability distribution
-	embed_probs = embed_logits.softmax(dim=-1).save()
-	logit_trajectory.append(embed_logits)
-	prob_trajectory.append(embed_probs)
+# Reshape to separate heads: (batch, num_heads, head_dim)
+out_proj_input_reshaped = out_proj_input.view(-1, num_heads, head_dim)
+out_proj_weight_reshaped = out_proj_weight.view(d_model, num_heads, head_dim)
 
-	for layer in layers:
-		residual_stream = layer.output[0][:, -1, :]
-		intermediate_logits = unembed(ln_f(residual_stream)).save()
-		intermediate_probs = intermediate_logits.softmax(dim=-1).save()
-		logit_trajectory.append(intermediate_logits)
-		prob_trajectory.append(intermediate_probs)
+# Apply out_proj per head
+residual_head_contribs = torch.einsum('bhd,mhd->bhm', out_proj_input_reshaped, out_proj_weight_reshaped)
+
+def norm_and_unembed(contribs):
+	...
+
+head_logit_contribs = norm_and_unembed(residual_head_contribs)
 ```
 
-# Attention Heads
-The output of an attention layer is just the sum of the outputs of its heads. Hence we can equivalently add the output of each head to the residual stream independently, where each output is a residual contribution. Thus we can use DLA to find the logit contributions for each head -- called **head attribution**. You might do this for a particular attention layer after identifying it has a large contribution.
+# Token Attribution
+Once we've identified an important head, we can dig deeper. We can decompose at the token level by moving the projection inside the inner sum:
+
+$$\mathbf{y}_t = \sum_{h=1}^{H} \sum_{j=1}^{T} \alpha_{h,t,j} \mathbf{v}_h^{(j)} W_O^{(h)}$$
+
+Each term $\alpha_{h,t,j} \mathbf{v}_h^{(j)} W_O^{(h)}$ represents the contribution of source token $j$ through head $h$. This reveals which source tokens are driving the head's contribution to the prediction.
+
+Unfortunately, we can't access these directly from most models, so we recompute them from the queries, keys and values. The details are model-dependent (e.g. handling Grouped-Query Attention), so see [the accompanying notebook](https://colab.research.google.com/drive/1WBfSycdPDkNnbtQXeIpiqPwhEHGEBL1v?usp=sharing) for the full implementation.
+
+```python
+with model.trace(prompt) as tracer:
+    q = attn_block.q_proj.output
+    k = attn_block.k_proj.output
+    v = attn_block.v_proj.output
+
+    # Compute α_{h,t,j} * v_h^j for each source token j
+    token_weighted_values = compute_token_weighted_values(
+        q, k, v, target_head, model.config
+    ).save()
+
+    # Save LayerNorm scaling factor
+    ...
+
+# Apply W_O^{(h)} for target head
+out_proj_head = out_proj_weight.view(d_model, num_heads, head_dim)[:, target_head, :].T
+residual_token_contribs = token_weighted_values @ out_proj_head
+
+def norm_and_unembed(contribs):
+	...
+
+token_logit_contribs = norm_and_unembed(residual_token_contribs)
+```
+
+For both head and token attribution, I recommend summing the decomposition to verify its correctness. This is especially important when you need to reimplement complex attention mechanisms such as GQA or MLA (DeepSeek).
+
+```python
+# Verify token attribution sums to head contribution
+head_logits = head_logit_contribs[:, target_head, :]
+assert torch.allclose(token_logit_contribs.sum(dim=1), head_logits, atol=1e-3), \
+    f"Mismatch! Token sum does not equal head contribution."
+```
+
+Working implementations of both techniques applied to Qwen2.5-0.5B can be found in the [notebook](https://colab.research.google.com/drive/1WBfSycdPDkNnbtQXeIpiqPwhEHGEBL1v?usp=sharing).
 
 # Logit Difference
 We're often interested not so much in the raw logits but in the relationship between two logits: typically a correct and an incorrect token. Where the incorrect token is chosen to control for the other tasks the model is doing. The metric for this is the logit difference: `correct_logit - incorrect_logit`. This is linear so we can also look at the contributions of each component to the difference: `correct_logit_contribution - incorrect_logit_contribution`.
@@ -266,6 +308,45 @@ def unembed(contrib):
 logit_diffs = list(map(unembed, ln_f_contributions))
 ```
 
+# Logit Lens
+DLA decomposes the final prediction into component contributions. Sometimes, however, we want to ask a different question: what does the model 'believe' at an intermediate layer—what would it predict if computation stopped there? To answer this, we can read the residual stream after layer $l$ and transform it to logits. This approach is called **Logit Lens**. The [original post](https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens) explores a broader range of metrics and visualisations than covered here, and is well worth reading for further approaches.
+
+A key gotcha is that Logit Lens implementations typically don't fix the LayerNorm standard deviation but compute it fresh for the intermediate residuals. This approach answers the question: what would the logits be if the later layers made no contributions to the residual stream? This contrasts with the DLA aim of decomposing the logits exactly into contributions from each component (i.e. the contributions should sum to the logits).
+
+Further, since the aim of Logit Lens is to make a statement about the model's 'belief', it's common to apply the softmax to the logits to give a probability distribution. This is not the case with DLA since the non-linearity of softmax breaks the decomposition.
+
+```python
+prompt = "The Eiffel Tower is in the city of"
+
+token_embed = model.transformer.wte
+position_embed = model.transformer.wpe
+layers = model.transformer.h
+ln_f = model.transformer.ln_f
+unembed = model.lm_head	
+
+logit_trajectory = []
+prob_trajectory = []
+
+with model.trace(prompt) as tracer:
+	# Save only the residual stream for the last token with [:, -1, :]
+	embedding = token_embed.output[:, -1, :] + position_embed.output[:, -1, :]
+
+	# Apply LayerNorm (computing σ fresh from this intermediate state) 
+	# and Unembedding
+	embed_logits = unembed(ln_f(embedding)).save()
+	# Apply Softmax to get the probability distribution
+	embed_probs = embed_logits.softmax(dim=-1).save()
+	logit_trajectory.append(embed_logits)
+	prob_trajectory.append(embed_probs)
+
+	for layer in layers:
+		residual_stream = layer.output[0][:, -1, :]
+		intermediate_logits = unembed(ln_f(residual_stream)).save()
+		intermediate_probs = intermediate_logits.softmax(dim=-1).save()
+		logit_trajectory.append(intermediate_logits)
+		prob_trajectory.append(intermediate_probs)
+```
+
 # Plotting and Interpretation
 To illustrate these techniques, let's examine the logit contributions for a concrete example. Below is a plot of the contributions of each layer to the logit difference. The model is GPT2 (LayerNorm) and the prompt is: "The Eiffel Tower is in the city of".
 
@@ -279,7 +360,7 @@ We can also observe the three large (+~0.3) contributions from MLPs 9, 10 and 11
 
 Interestingly, the contribution is roughly equally split across these three consecutive layers. Since none of them individually would overcome the $\boldsymbol\beta$ contribution, this suggests distributed computation rather than redundancy -- each layer appears necessary for the final prediction.
 
-However, DLA alone cannot tell us *what* these MLPs are computing or *how* they're using the contextual information. To draw more concrete conclusions about the mechanisms, we would need further analysis with tools such as activation patching or neuron interpretation. To draw more concrete conclusions, we would need further analysis with tools such as activation patching. 
+However, DLA alone cannot tell us *what* these MLPs are computing or *how* they're using the contextual information. To draw more concrete conclusions, we would need further analysis with tools such as activation patching. 
 
 ## Qwen Plot
 
@@ -291,7 +372,7 @@ Below is the plot for the same experiment done with Qwen2.5-0.5B, a slightly lar
 
 The results here are far more concentrated, with most contribution coming from just 4 components in the final layers. Since this model has no $\boldsymbol\beta$ offset, the unigram statistics must be encoded within the model's weights. The large negative contributions from the final two MLPs (~-2.7 and ~-3.1) suggest these layers may encode unigram statistics, though confirming this would require further investigation.
 
-In contrast to GPT2, we see a large positive contribution directly from an attention layer (~6.3 from L21.attn). This is the single largest contribution in the entire decomposition. This tells us that information favouring " Paris" over " London" is being moved from earlier token positions and written directly to the residual stream by this attention layer - this attention output is the dominant signal determining the final prediction. It would be interesting to run DLA for the heads of this layer for a more precise analysis.
+In contrast to GPT2, we see a large positive contribution directly from an attention layer (~6.3 from L21.attn). This is the single largest contribution in the entire decomposition. This tells us that information favouring " Paris" over " London" is being moved from earlier token positions and written directly to the residual stream by this attention layer - this attention output is the dominant signal determining the final prediction. This example is played out in the [notebook](https://colab.research.google.com/drive/1WBfSycdPDkNnbtQXeIpiqPwhEHGEBL1v?usp=sharing) where head attribution and token attribution are both applied. 
 
 The contribution from the following MLP is significant (~3.9) although its exact role is unclear.
 
@@ -308,4 +389,4 @@ However, DLA has important limitations. It answers "what contributes" and "how m
 
 For these reasons, DLA is best viewed as a starting point for mechanistic interpretability -- a way to efficiently identify which components warrant deeper investigation through complementary techniques such as activation patching and analysis of attention patterns in specific heads.
 
-*Thanks to Elias Sandmann for their review and suggestions, especially in the Logit Lens section.*
+*Thanks to **Elias Sandmann** for inspiring the framing of the Logit Lens section as well as providing feedback on the first draft, and to **Sriram Balasubramanian** for inspiring the Head Attribution and Token Attribution sections.*
