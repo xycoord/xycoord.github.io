@@ -8,6 +8,8 @@ A central worry for the AI safety mechanism of monitoring is that a sufficiently
 
 In this post, I'll first get you up to speed on the Neural Chameleons paper, then explain why its use of a known trigger represents a best-case scenario for defenders. I introduce a taxonomy of chameleon types (manual, instinctive, and rational) distinguished by their cognitive mechanisms, and explore through a thought experiment how the latter two might arise in the wild. I close by discussing avenues for defence.
 
+<!--more-->
+
 # Probes
 A probe is a tool which takes model activations as an input and tells us something about what the model is currently thinking: typically a classification (e.g. is the model lying?) or a measure (e.g. how intelligent does the model think the user is?). There are various different architectures of probe, from linear probes (logistic regression on a single layer's activations) to more complex architectures like MLPs, attention-based probes, and ensembles that combine probes across multiple layers.
 The hope is that even when chain of thought monitors fail, we will be able to use probes to find out what the model is really thinking.
